@@ -28,8 +28,8 @@ pipeline {
 
         stage('Archive Artifacts') {
             steps {
-                archiveArtifacts artifacts: '**/*.jar', fingerprint: true
-
+                // Fixed artifact path to match Maven output
+                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
             }
         }
 
@@ -53,4 +53,3 @@ pipeline {
         }
     }
 }
-

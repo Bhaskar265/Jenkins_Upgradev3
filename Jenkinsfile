@@ -1,55 +1,21 @@
 pipeline {
-    agent any
-
-    tools {
-        maven 'Maven-3.9.11'   // Must match Maven name in Jenkins Global Tool Config
-        jdk 'JDK-21'           // Must match JDK name in Jenkins Global Tool Config
-    }
-
-    stages {
-        stage('Checkout') {
-            steps {
-                git branch: 'main', 
-                    url: 'git@github.com:Bhaskar265/maven-samples.git'
+      agent any
+      stages {
+            stage('Init') {
+                  steps {
+                        echo 'Hi, this is test from LevelUp360'
+                        echo 'We are Starting the Testing'
+                  }
             }
-        }
-
-        stage('Build & Test') {
-            steps {
-                sh 'mvn clean install'
+            stage('Build') {
+                  steps {
+                        echo 'Building Sample Maven Project'
+                  }
             }
-        }
-
-        stage('Generate Reports') {
-            steps {
-                sh 'mvn site'
+            stage('Deploy') {
+                  steps {
+                        echo "Deploying in Staging Area"
+                  }
             }
-        }
-
-        stage('Archive Artifacts') {
-            steps {
-                // Fixed artifact path to match Maven output
-                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
-            }
-        }
-
-        stage('Publish Site Report') {
-            steps {
-                publishHTML([
-                    allowMissing: false,
-                    alwaysLinkToLastBuild: true,
-                    keepAll: true,
-                    reportDir: '/tmp/single-module-site',
-                    reportFiles: 'index.html',
-                    reportName: 'Project Site'
-                ])
-            }
-        }
-    }
-
-    post {
-        always {
-            junit '**/target/surefire-reports/*.xml'
-        }
-    }
+      }
 }
